@@ -76,7 +76,7 @@ void hal_spi_init(void)
 		// CPOL = 0 //idk should probably be changed if tests fail
 		// CPHA = 0 //idk should probably be changed if tests fail
 		
-		//complete setting = 0000 0011 0011 1100 = 
+		//complete setting = 0000 0011 0011 1100
 		SPI1->CR1 = 0x033C;
 		
 		//activate setting by changing SPE to 1
@@ -96,9 +96,11 @@ uint8_t hal_spi_read_write(uint8_t send_byte)
 {
     /// STUDENTS: To be programmed
 
+		
     
     set_ss_pin_low();
-
+		
+		
 
     //write byte to data register
     SPI1->DR = send_byte;
@@ -112,6 +114,10 @@ uint8_t hal_spi_read_write(uint8_t send_byte)
     //read byte from data register
     uint8_t received_byte = SPI1->DR;
 
+	
+		//wait until SPI is not busy
+    while(SPI1->SR & BIT_BSY);
+	
     wait_10_us();
 
     set_ss_pin_high();
